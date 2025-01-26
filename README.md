@@ -1,19 +1,16 @@
-## AWS Setup Guide - CS 3733 B24
+## AWS Setup Guide - CS 3733 C25 
 Vivek Jagadeesh
 ### Overview
-This guide will help you setup an AWS account and deploy a flask app with a PostgreSQL database to AWS EC2 and RDS.
+This guide will help you setup an Amazon Web Services account and deploy your term project to the cloud using AWS EC2 and RDS, and Docker. 
 
+<strong>0AWS EC2 (elastic cloud compute) </strong> is an AWS services which allows you to create virtual machines which run on AWS Servers. This will <strong>publically host</strong> your term project so that it is available via the internet. 
 
-EC2 - Elastic Cloud Compute is an AWS service which allows you to create virtual machines that run on AWS servers. These will run the application
+<strong> AWS RDS (relational database services) </strong>is an AWS service which will run the back-end database for your application on its own, dedicated server. This is much faster than if we did not use a dedicated service. 
 
+<strong> Docker </strong> is a tool which allows you to use containers to run your code. It standardizes the development environment, because every container built using the same dockerfile (provided) will run in exactly the same way. We are using docker to build your project locally, because EC2 is not powerful enough to build the project on its own. 
 
-RDS - Relational Database Services is an AWS service which allows you to run a DBMS server. This will run the database.
-
-
-
-
-## Warning
-AWS requires a credit card for all accounts. Deviating from the guidelines in these instructions could result in charges. Furthermore, make sure that after this course is finished that all AWS resources are closed.
+# Warning!
+AWS requires a credit card for all accounts. Deviating from the guidelines in these instructions could result in charges. Furthermore, make sure that after as soon as this course is finished that all AWS resources are closed to avoid charges. It is also very important that you periodically check AWS cost and manegement center to ensure you are not being charged 
 
 
 ### Step 1 - Make an AWS account
@@ -24,12 +21,14 @@ AWS requires a credit card for all accounts. Deviating from the guidelines in th
 
 
 ### Step 2 - Launch an EC2 instance
+Please follow these steps closely: 
+
 1. In the search bar on the AWS management console, search for "EC2", and click on the first option that appears under services.
 2. Once on the EC2 home page, click on the orange button in the middle of the center column which says "Launch Instance". This should bring you to the following page :
-![alt text](image.png)
-3. Name your EC2 instance something that you will remember.
+![alt text](EC2-Config.png)
+3. Name your EC2 instance after your team name. 
 4. Select "Amazon Linux" as the AMI, and continue to the next step.
-5. Make sure the instance type is set to t2.micro (this is VERY important. Any other instance type will result in immediate charges. )
+5. <strong>IMPORTANT!</strong> Make sure the instance type is set to t2.micro. Any other instance type will result in immediate charges.
 6. Create a new key-pair. This is how you are going to SSH into your EC2 instance. When prompted, select the RSA type and .pem format, and then click on "create key pair". Save this key somewhere safe, as it will be required every time you need to deploy your code.
 7. In the network settings tab, select the following
     - Allow SSH traffic from anywhere
@@ -37,12 +36,12 @@ AWS requires a credit card for all accounts. Deviating from the guidelines in th
     - Allow HTTP traffic from anywhere
 8. Do not change the other settings.
 9. Make sure your summary on the right hand side matches the below image:
-![alt text](image-1.png)
+![alt text](EC2-Summary.png)
 10. You can now launch the instance.
 
 
 ### Step 3 - Setting up RDS
-1. Search for RDS in the search bar and select the first result.
+1. While on the AWS management console, search for RDS in the search bar and select the first result.
 2. On the RDS home page, click on create database.
 3. Select "standard-create" at the top of the page, and then select PostgreSQL as the database engine.
 4. IMPORTANT: Select the free tier for the instance size. Any other choice will result in charges. AWS will default to select Production. Make sure you change it to free tier
