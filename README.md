@@ -116,7 +116,7 @@ This creates a workflow which will build your container as soon as you push to g
 ## Step 8 - Manual Deployment 
 It may be helpful to bypass the git pipeline if deployment fails. 
 
-### Step 8A - building the container locally
+### Step 8A - building the container manually
 - First, we need to edit the <code>build.sh</code> script included in this guide.
 - In <code>build.sh</code>, replace vivekjag1 with your docker hub username. Failing to do so will result in your container not being pushed.
 - Change the repository name from softengdemo to whatever you named your docker hub repository in step 5. 
@@ -139,11 +139,23 @@ It may be helpful to bypass the git pipeline if deployment fails.
 - AWS provides 750 hours a month of EC2 and RDS for free. This is more than the number of hours in a month, so it is safe to leave your instances up 24/7. This offer expires after 1 year, so make sure to take down all instances as soon as the course is over.
 - As a general rule of thumb, never have more than one ec2 instance running at once. Deploy all your applications to the same server, and terminate that EC2 instance after the course is over.
 
+### About database migrations and AWS 
+- Production databases maintain a table of your migrations, and if your application is missing any (if someone deletes the migrations folder), the application will refuse to start. 
+- This is a fairly simple fix: we just need to drop the tables in postgres on RDS. Follow the below steps while connected to your EC2 instance 
+    1. Run <code> sudo yum install postgresql16 </code>
+    2. Run <code> psql -h [RDS ENDPOINT HERE] -U postgres -d postgres </code> assuming the username, and database name are both postgres on RDS
+    3. Manually drop all the tables in postgres by running </code>DROP TABLE [table name] CASCADE; </code> (do not forget semicolon). Repeat until all tables are gone. You can see which tables are active using <code> \dt</code>
+    4. Now, on your local machine, delete your migrations folder and .db file, run <code> flask db init</code>, then <code> flask db migrate </code>, and finally <code>flask db upgrade</code>. 
+    5. Commit to git or rebuild the container (if not using pipeline)
+    6. Back on EC2, re-pull the container from docker hub and deploy. 
+
 ### Debugging Problems 
 - If your code can't deploy, it may be one of the following: 
     1. You have not run flask db upgrate and flask db migrate and your database schema is not up to date.
     2. You did not update the RDS connection string 
     3. The container did not push to docker hub
+    
+- If the pipeline keeps failing, inspect the logs on git. If the logs are not detailed enough, try building the container locally using <code>build.sh</code>
 - A good way to debug is to omit the -d flag when you run your container. This will print the output to terminal (when you are SSHed into EC2), so you can see whta exactly is going on. 
 
 
