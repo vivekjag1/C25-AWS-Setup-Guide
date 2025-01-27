@@ -12,4 +12,4 @@ WTForms-SQLAlchemy==0.4.1
 email-validator==2.1.1
 pytest==8.2.2
 python-dotenv==1.0.1
-psycopg2==2.9.9
+psycopg2-binary==2.9.9
