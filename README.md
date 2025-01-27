@@ -94,7 +94,7 @@ Please run these commands exactly while SSHed into your EC2 instance
 
 Now log out of EC2 by typing <code>exit</code>
 
-## Step 7 - Setting up a docker-hub pipeline in GitHub (highly reccomended)
+## Step 7 - Setting up a docker-hub pipeline in GitHub (highly recommended)
 Ordinarily, to deploy your application, we would need to commit changes to git, re-build the container, and then deploy on AWS. To speed up development, we can use GitHub to build the docker containers everytime we make a change and commit to git. This reduces the workflow to simply commiting to git, and then deploying on AWS. 
 
 1. To setup the docker CI/CD pipeline, first navigate to the settings tab of your team repository 
