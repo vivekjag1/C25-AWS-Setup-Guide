@@ -1,3 +1,3 @@
-docker build -t softengdemo . 
-docker tag softengdemo vivekjag1/softengdemo
-docker push vivekjag1/softengdemo
+docker build -t team-o-production . 
+docker tag team-o-production vivekjag1/team-o-production
+docker push vivekjag1/team-o-production
